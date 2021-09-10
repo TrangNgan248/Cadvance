@@ -1,1 +1,0 @@
-gcc -o main main.c graph.c libfdr.a
