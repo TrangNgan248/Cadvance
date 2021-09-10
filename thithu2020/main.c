@@ -72,8 +72,10 @@ void docfile(FILE *f, FILE *f1, Graph g)
             }
         }
         pass[p] = id1;
+        //printf("%d ", pass[p]);
         p++;
     }
+    fclose(f1);
 }
 
 void inDSHocPhan(Graph g)
@@ -111,7 +113,7 @@ int main()
             scanf("%s", hocphan);
 
             JRB iter;
-            int tontai = 0, dangki = 0;
+            int tontai = 0;
             jrb_traverse(iter, g.vertices)
             {
                 if (strcmp(jval_s(iter->val), hocphan) == 0)
@@ -126,40 +128,44 @@ int main()
             }
             else
             {
+                int hoanthanh = 0;
                 for (int i = 0; i < p; i++)
                 {
                     if (id == pass[i])
                     {
-                        printf("Đã hoàn thành học phần");
-                        break;
+                        printf("Bạn đã hoàn thành học phần này.");
+                        hoanthanh++;
                     }
-                    if(id != pass[i])
+                }
+                if (hoanthanh == 0)
+                {
+                    int output[10], dk=0;
+                    int res = indegree(g, id, output);
+                    if (res == 0)
                     {
-                        int output[10];
-                        int res = indegree(g, id, output);
-                        if(res ==0){
-                            printf("Đủ điềù kiện đăng ký học phần");
-                        }
-                        else{
-                        for (int j = 0; j < res; j++)
+                        printf("Bạn đủ điều kiện đăng kí học phần");
+                    }
+                    else
+                    {
+                        for (int i = 0; i < p; i++)
                         {
-                            if (pass[i] != output[j])
-                            {
-                                dangki++;
+                            for (int j = 0; j < res; j++)
+                            {   
+                                if (output[j] == pass[i])
+                                {
+                                    dk++;
+                                }
                             }
                         }
-                        }
                     }
-                }
-                if (dangki == 0)
-                {
-                    printf("Đủ điều kiện đăng kí");
-                }
-                else if(dangki == -1)
-                {
-                    printf("Học phần đã hoàn thành");
-                }else {
-                    printf("Không đăng ký được");
+                    if (dk != 0)
+                    {
+                        printf("Bạn đủ điều kiện đăng kí học phần");
+                    }
+                    else
+                    {
+                        printf("Không đăng kí được");
+                    }
                 }
             }
             break;
